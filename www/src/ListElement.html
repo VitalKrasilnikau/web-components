@@ -1,0 +1,24 @@
+<link rel="import" href="https://polygit.org/components/polymer/polymer-element.html">
+<link rel="import" href="https://polygit.org/components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="ItemElement.html">
+
+<dom-module id="list-element">
+  <template>
+    <div id="countries">
+      <template is="dom-repeat" items="{{countries}}">
+        <item-element name="{{item.name}}" capital="{{item.capital}}"/>
+      </template>
+    </div>
+  </template>
+  <script>
+    class ListElement extends Polymer.Element {
+      static get properties() {
+        return {
+          countries: Object
+        }
+      }
+      static get is() { return 'list-element'; }
+    }
+    customElements.define(ListElement.is, ListElement);
+  </script>
+</dom-module>

@@ -1,0 +1,19 @@
+<link rel="import" href="https://polygit.org/components/polymer/polymer-element.html">
+
+<dom-module id="item-element">
+  <template>
+    <div><strong>[[name]]</strong> : [[capital]]</div>
+  </template>
+  <script>
+    class ItemElement extends Polymer.Element {
+      static get properties() {
+        return {
+          name: String,
+          capital: String
+        }
+      }
+      static get is() { return 'item-element'; }
+    }
+    customElements.define(ItemElement.is, ItemElement);
+  </script>
+</dom-module>

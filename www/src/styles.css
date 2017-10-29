@@ -1,0 +1,11 @@
+body>div {
+  margin: 0 auto;
+  width: 400px;
+}
+#countries {
+  height: 300px;
+  overflow: auto;
+  background: #ddd;
+  border: 1px solid #777;
+  margin-bottom: 30px;
+}

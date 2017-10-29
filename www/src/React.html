@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="countries.js"></script>
+
+  <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.js"></script>
+
+  <link href="styles.css" rel="stylesheet">
+  <title>React &amp; JSX example</title>
+</head>
+<body>
+  <div id="host"></div>
+
+  <script type="text/babel">
+    function CountryItem(props) {
+      return (
+        <div>
+          <strong>{props.name}</strong> : {props.capital}
+        </div>
+      );
+    }
+
+    function CountryList(props) {
+      return (
+        <div id="countries">
+          {props.items.map(x =>
+            <CountryItem key={x.name} {...x} />
+          )}
+        </div>
+      );
+    }
+
+    class Body extends React.Component {
+
+      constructor(props) {
+        super(props);
+        this.state = {items: getCountries() };
+        this.handleAddClick = this.handleAddClick.bind(this);
+        this.handleRemoveClick = this.handleRemoveClick.bind(this);
+        this.updateState = this.updateState.bind(this);
+      }
+
+      handleAddClick() {
+        var cName = prompt("Add country name", "Belarus");
+        var cCap = prompt("Add country capital", "Minsk");
+        addCountry(cName, cCap);
+        this.updateState();
+      }
+
+      handleRemoveClick() {
+        var cName = prompt("Add country name to remove", "Belarus");
+        deleteCountry(cName);
+        this.updateState();
+      }
+
+      updateState() {
+        this.setState(x => ({items: getCountries() }));
+      }
+
+      render() {
+        return [
+          <h2>Countries</h2>,
+          <CountryList items={this.state.items} />,
+          <input type="button" value="Add" onClick={this.handleAddClick}/>,
+          <input type="button" value="Remove" onClick={this.handleRemoveClick}/>
+        ];
+      }
+    }
+
+    ReactDOM.render(
+      <Body />,
+      document.getElementById('host')
+    );
+
+  </script>
+  <script>
+    function getCountries() {
+      var items = [];
+      for (var c in countriesHash) {
+        items.push({ name: c, capital: getCountry(c) });
+      }
+      return items;
+    }
+    var savedCountries = localStorage['saved'];
+    if (savedCountries) {
+      countriesHash = JSON.parse(savedCountries);
+    }
+    $(window).unload(function() {
+      localStorage['saved'] = JSON.stringify(countriesHash);
+    });
+  </script>
+</body>
+</html>

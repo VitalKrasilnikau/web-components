@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="countries.js"></script>
+  <link href="styles.css" rel="stylesheet">
+  <title>Countries example</title>
+</head>
+<body>
+  <div>
+    <h2>Countries</h2>
+    <div id="countries"></div>
+    <input type="button" value="Add" id="addBtn">
+    <input type="button" value="Remove" id="removeBtn">
+  </div>
+  <script>
+    function renderCountries() {
+      var html = [];
+      for (var c in countriesHash) {
+        html.push('<div><strong>' + c + '</strong> : ' + getCountry(c) + '</div>');
+      }
+      $('#countries').html(html.join(''));
+    }
+
+    function add() {
+      var cName = prompt("Add country name", "Belarus");
+      var cCap = prompt("Add country capital", "Minsk");
+      addCountry(cName, cCap);
+      renderCountries();
+    }
+
+    function remove() {
+      var cName = prompt("Add country name to remove", "Belarus");
+      deleteCountry(cName);
+      renderCountries();
+    }
+
+    $(function() {
+      $('#addBtn').click(add);
+      $('#removeBtn').click(remove);
+
+      var savedCountries = localStorage['saved'];
+      if (savedCountries) {
+        countriesHash = JSON.parse(savedCountries);
+        renderCountries();
+      }
+
+      $(window).unload(function() {
+        localStorage['saved'] =
+          JSON.stringify(countriesHash);
+      });
+    });
+  </script>
+</body>
+</html>

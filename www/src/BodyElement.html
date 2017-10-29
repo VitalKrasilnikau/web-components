@@ -1,0 +1,51 @@
+<link rel="import" href="https://polygit.org/components/polymer/polymer-element.html">
+<link rel="import" href="ListElement.html">
+
+<dom-module id="body-element">
+  <template>
+    <style>
+    :host>div {
+      margin: 0 auto;
+      width: 400px;
+    }
+    </style>
+    <div>
+      <h2>Countries</h2>
+      <list-element countries="{{countries}}"></list-element>
+      <input type="button" value="Add" on-click="add">
+      <input type="button" value="Remove" on-click="remove">
+    </div>
+  </template>
+  <script>
+    function getCountries() {
+      var items = [];
+      for (var c in countriesHash) {
+        items.push({ name: c, capital: getCountry(c) });
+      }
+      return items;
+    }
+
+    class BodyElement extends Polymer.Element {
+      constructor() {
+        super();
+        this.countries = getCountries();
+      }
+
+      static get is() { return 'body-element'; }
+
+      add() {
+        var cName = prompt("Add country name", "Belarus");
+        var cCap = prompt("Add country capital", "Minsk");
+        addCountry(cName, cCap);
+        this.countries = getCountries();
+      }
+
+      remove() {
+        var cName = prompt("Add country name to remove", "Belarus");
+        deleteCountry(cName);
+        this.countries = getCountries();
+      }
+    }
+    customElements.define(BodyElement.is, BodyElement);
+  </script>
+</dom-module>

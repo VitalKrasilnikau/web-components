@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="countries.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+
+  <link href="styles.css" rel="stylesheet">
+  <title>Handlebars example</title>
+</head>
+<body>
+  <div id="host"></div>
+
+  <script id="item-template" type="text/x-handlebars-template">
+    <div>
+      <strong>{{name}}</strong> : {{capital}}
+    </div>
+  </script>
+  <script id="list-template" type="text/x-handlebars-template">
+    <div id="countries">
+      {{#each items}}
+        {{> itemTemplate }}
+      {{/each}}
+    </div>
+  </script>
+  <script id="body-template" type="text/x-handlebars-template">
+    <h2>Countries</h2>
+    {{> listTemplate }}
+    <input type="button" value="Add" id="addBtn">
+    <input type="button" value="Remove" id="removeBtn">
+  </script>
+
+  <script>
+    function getCountries() {
+      var items = [];
+      for (var c in countriesHash) {
+        items.push({ name: c, capital: getCountry(c) });
+      }
+      return items;
+    }
+
+    function renderCountries() {
+      var items = getCountries();
+      $('#countries').replaceWith(listTemplate({items: items}));
+    }
+
+    function renderBody() {
+      var items = getCountries();
+      window.bodyTemplate = Handlebars.compile($("#body-template").text());
+      $('#host').html(bodyTemplate({items: items}));
+    }
+
+    function add() {
+      var cName = prompt("Add country name", "Belarus");
+      var cCap = prompt("Add country capital", "Minsk");
+      addCountry(cName, cCap);
+      renderCountries();
+    }
+
+    function remove() {
+      var cName = prompt("Add country name to remove", "Belarus");
+      deleteCountry(cName);
+      renderCountries();
+    }
+
+    $(function() {
+      Handlebars.registerPartial('itemTemplate', $('#item-template').text());
+      Handlebars.registerPartial('listTemplate', $('#list-template').text());
+
+      window.listTemplate = Handlebars.compile($("#list-template").text());
+      window.bodyTemplate = Handlebars.compile($("#body-template").text());
+
+      var savedCountries = localStorage['saved'];
+      if (savedCountries) {
+        countriesHash = JSON.parse(savedCountries);
+      }
+      renderBody();
+
+      $('#addBtn').click(add);
+      $('#removeBtn').click(remove);
+
+      $(window).unload(function() {
+        localStorage['saved'] = JSON.stringify(countriesHash);
+      });
+    });
+  </script>
+</body>
+</html>
