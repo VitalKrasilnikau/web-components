@@ -1,12 +1,13 @@
-<link rel="import" href="https://polygit.org/components/polymer/polymer-element.html">
-<link rel="import" href="https://polygit.org/components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="https://cdn.rawgit.com/download/polymer-cdn/2.6.0.2/lib/polymer/polymer-element.html">
+<link rel="import" href="https://cdn.rawgit.com/download/polymer-cdn/2.6.0.2/lib/polymer/lib/elements/dom-repeat.html">
+
 <link rel="import" href="ItemElement.html">
 
 <dom-module id="list-element">
   <template>
     <div id="countries">
       <template is="dom-repeat" items="{{countries}}">
-        <item-element name="{{item.name}}" capital="{{item.capital}}"/>
+        <item-element name="[[item.name]]" capital="{{item.capital}}"/>
       </template>
     </div>
   </template>
